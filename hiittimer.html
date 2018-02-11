@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HIIT Timer</title>
+	<style type="text/css">
+		
+/* GENERAL */
+
+* { padding: 0; margin: 0; }
+main { max-width: 50em; padding-right: 1em; padding-left: 1em; margin: auto; }
+
+.timer-bar { height: 2em; width: 100%; border: 1px solid #ddd; }
+.timer-bar div { display: inline-block; height: 2em; }
+
+/* HEADER */
+
+header { width: 100%; height: 3em; background-color: #EE0000; }
+header h1, header h2 { display: inline-block; padding-left: 0.5em; padding-right: 0.5em; }
+header h1 { font-size: 3em; line-height: 1em; }
+header h2 { font-size: 1.5em; line-height: 2em; }
+
+a { display: inline-block; color: black; outline: none; text-decoration: none; }
+
+#create-site-link { float: right; display: none; }
+#create-site-link:hover { background-color: #D72527; }
+
+/* CREATE SITE*/
+
+#create-site p { width: 100%; text-align: center; margin-top: 1em; }
+
+.inputs { display: block; width: 100%; height: 2em; font-size: 1em; line-height: 2em; text-align: center; margin-top: 0.2em; }
+
+#create-site .timer-bar { margin-top: 2em; }
+
+.placeholder { width: 100%; height: 3em; }
+
+#create-timer-button { position: fixed; bottom: 0; left: 0; width: 100vw; height: 3em; line-height: 3em; text-align: center; background-color: #EE0000; }
+#create-timer-button:hover { background-color: #D72527; }
+
+/* TIMER SITE */
+
+#timer-site h2 { text-align: center; font-size: 2em; }
+
+
+	</style>
+</head>
+<body>
+	<header>
+		<h1>HIIT TIMER</h1>
+		<a id="create-site-link" href="javascript:showCreate();"><h2>create new</h2></a>
+	</header>
+
+
+	<main>
+		<div id="create-site">
+
+			<p><b>Name</b>:</p>
+			<input class="inputs" type="text" id="input-name" placeholder="name" value="my awesome HIIT timer" maxlength="40">
+			<p><b>Number of Sets</b>:</p>
+			<input class="inputs" type="number" id="input-set-amount" value="6" min="1">
+			<p>Duration of <b> Warmup Interval</b> (in seconds):</p>
+			<input class="inputs" type="number" id="input-time-warmup" value="90" min="0">
+			<p>Duration of <b> High Intensity Interval</b> (in seconds):</p>
+			<input class="inputs" type="number" id="input-time-high" value="30" min="0">
+			<p>Duration of <b> Low Intensity Interval</b> (in seconds):</p>
+			<input class="inputs" type="number" id="input-time-low" value="90" min="0">
+			<p>Duration of <b> Cooldown Interval</b> (in seconds):</p>
+			<input class="inputs" type="number" id="input-time-cooldown" value="90" min="0">
+
+			<div class="timer-bar"></div>
+
+			<div class="placeholder"></div>
+			<a id="create-timer-button" href="javascript:createTimer()">Create Timer <span id="create-timer-button-time"></span></a>
+		</div>
+
+		<div id="timer-site">
+			<h2 id="timer-name-header"></h2>
+		</div>
+
+	</main>
+
+
+	<script type="text/javascript">
+		
+let id = x => document.getElementById(x)
+let currentSite = 'create'
+
+init()
+
+function init() {
+	let x = window.location.hash.slice(1)
+	if(x[0] == 'T') showTimer( dehash(x.slice(1)) )
+	else showCreate()
+
+	const list = document.getElementsByClassName('inputs');
+	for(let i=0; i < list.length; i++){
+		list[i].oninput = createTimerInputChange
+	}
+}
+
+function dehash(hash) {
+	const arr = decodeURI(hash).split(';')
+
+	const name = arr[0]
+	const sets = +arr[1] > 1 ? +arr[1] : 1
+	const warmup = +arr[2] > 0 ? +arr[2] : 0
+	const highII = +arr[3] > 0 ? +arr[3] : 0
+	const lowII = +arr[4] > 0 ? +arr[4] : 0
+	const cooldown = +arr[5] > 0 ? +arr[4] : 0
+
+	return { name: name, sets: sets, warmup: warmup, highII: highII, lowII: lowII, cooldown: cooldown }
+}
+
+function showCreate() {
+	console.log('create')
+	window.location.hash = ''
+	id('create-site-link').style.display = 'none'
+	id('create-site').style.display = 'initial'
+	id('timer-site').style.display = 'none'
+
+	createTimerInputChange()
+
+}
+
+function showTimer(timer) {
+	console.log('timer')
+	id('create-site-link').style.display = 'initial'
+	id('create-site').style.display = 'none'
+	id('timer-site').style.display = 'initial'
+
+	console.log(timer)
+
+	id('timer-name-header').innerHTML = timer.name
+
+}
+
+function createTimer() {
+
+	const list = document.getElementsByClassName('inputs')
+	let arr = []
+	for(let i=0; i < list.length; i++){
+		arr[i] = (list[i].value+'').replace(';', '')
+	}
+	const hash = arr.join(';')
+	window.location.hash = 'T' + encodeURI(hash)
+	showTimer(dehash(hash));
+}
+
+function createTimerInputChange() {
+
+	const list = document.getElementsByClassName('inputs')
+	let arr = []
+	for(let i=0; i < list.length; i++){
+		arr.push(list[i].value)
+	}
+
+	const sets = +arr[1]
+	const warmup = +arr[2]
+	const highII = +arr[3]
+	const lowII = +arr[4]
+	const cooldown = +arr[5]
+
+	const time = warmup + highII*sets + lowII*(sets-1) + cooldown
+
+	id('create-timer-button-time').innerHTML = ' (' + ~~(time/60) + ':' + ((time%60)+'00').slice(0,2) + ')'
+	fillTimerBar({ name: name, sets: sets, warmup: warmup, highII: highII, lowII: lowII, cooldown: cooldown })
+}
+
+function fillTimerBar(timer) {
+	const time = timer.warmup + timer.highII*timer.sets + timer.lowII*(timer.sets-1) + timer.cooldown
+	let result = '';
+	result += '<div style="width: '+timer.warmup/time*100+'%; background-color: yellow;" title="Warmup '+timer.warmup+'s"></div>'
+	result += '<div style="width: '+timer.highII/time*100+'%; background-color: red;" title="High Intensity '+timer.highII+'s"></div>'
+	for(let i=1; i < timer.sets; i++) {
+		result += '<div style="width: '+timer.lowII/time*100+'%; background-color: green;"title="Low Intensity '+timer.lowII+'s"></div>'
+		result += '<div style="width: '+timer.highII/time*100+'%; background-color: red;"title="High Intensity '+timer.highII+'s"></div>'
+	}
+	result += '<div style="width: '+timer.cooldown/time*100+'%; background-color: yellow;" title="Cooldown '+timer.cooldown+'s"></div>'
+
+	const timerBars = document.getElementsByClassName('timer-bar')
+	for(let i=0; i < timerBars.length; i++) timerBars[i].innerHTML = result
+}
+
+	</script>
+</body>
+</html>
