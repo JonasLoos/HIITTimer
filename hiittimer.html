@@ -163,6 +163,7 @@ function createTimerInputChange() {
 
 function fillTimerBar(timer) {
 	const time = timer.warmup + timer.highII*timer.sets + timer.lowII*(timer.sets-1) + timer.cooldown
+	
 	let result = '';
 	result += '<div style="width: '+timer.warmup/time*100+'%; background-color: yellow;" title="Warmup '+timer.warmup+'s"></div>'
 	result += '<div style="width: '+timer.highII/time*100+'%; background-color: red;" title="High Intensity '+timer.highII+'s"></div>'
