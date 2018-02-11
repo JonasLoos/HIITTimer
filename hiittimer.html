@@ -48,7 +48,7 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 <body>
 	<header>
 		<h1>HIIT TIMER</h1>
-		<a id="create-site-link" href="javascript:showCreate();"><h2>create new</h2></a>
+		<a id="create-site-link" href="#"><h2>create new</h2></a>
 	</header>
 
 
@@ -139,7 +139,6 @@ function createTimer() {
 	}
 	const hash = arr.join(';')
 	window.location.hash = 'T' + encodeURI(hash)
-	showTimer(dehash(hash));
 }
 
 function createTimerInputChange() {
@@ -176,6 +175,8 @@ function fillTimerBar(timer) {
 	const timerBars = document.getElementsByClassName('timer-bar')
 	for(let i=0; i < timerBars.length; i++) timerBars[i].innerHTML = result
 }
+
+window.addEventListener("hashchange", init)
 
 	</script>
 </body>
