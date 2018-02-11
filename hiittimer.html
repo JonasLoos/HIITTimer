@@ -89,7 +89,7 @@ let currentSite = 'create'
 init()
 
 function init() {
-	let x = window.location.hash.slice(1)
+	const x = window.location.hash.slice(1)
 	if(x[0] == 'T') showTimer( dehash(x.slice(1)) )
 	else showCreate()
 
@@ -113,8 +113,6 @@ function dehash(hash) {
 }
 
 function showCreate() {
-	console.log('create')
-	window.location.hash = ''
 	id('create-site-link').style.display = 'none'
 	id('create-site').style.display = 'initial'
 	id('timer-site').style.display = 'none'
@@ -124,12 +122,9 @@ function showCreate() {
 }
 
 function showTimer(timer) {
-	console.log('timer')
 	id('create-site-link').style.display = 'initial'
 	id('create-site').style.display = 'none'
 	id('timer-site').style.display = 'initial'
-
-	console.log(timer)
 
 	id('timer-name-header').innerHTML = timer.name
 
