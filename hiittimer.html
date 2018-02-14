@@ -44,16 +44,20 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 /* TIMER SITE */
 
-#timer-site h3 { text-align: center; font-size: 1.3em; }
+#timer-site h3 { text-align: center; font-size: 2em; margin-top: 0.5em; }
 
-#timer-div { width: 100%; height: 12em; margin: 2em 0; background-color: #ccc; }
+#timer-site .timer-bar { box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px 0 rgba(0, 0, 0, 0.09); }
+
+#timer-div { width: 100%; height: 16.5em; margin: 2em 0; background-color: #ccc; color: white; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px 0 rgba(0, 0, 0, 0.09); }
 #timer-div>div { display: block; width: 100%; }
-#timer-div-clock { height: 6em; }
-#timer-div-mid { height: 3em; }
+#timer-div-clock { height: 1.25em; font-size: 6em; text-align: center; }
+#timer-div-mid { height: 3em; font-size: 1.5em; text-align: center; }
+#timer-div-mid>div { display: inline-block; width: 30%; }
 #timer-div-bottom { border-top: 1px solid white; }
-#timer-div-bottom div { display: inline-block; }
-#timer-div-bottom-reset, #timer-div-bottom-start { height: 1.5em; width: 1.5em; border-right: 1px solid white; font-size: 2em; text-align: center; line-height: 1.3em; color: #eee; cursor: pointer; user-select: none; }
-#timer-div-bottom-reset:hover, #timer-div-bottom-start:hover { color: #fff; }
+#timer-div-bottom div { display: inline-block; height: 1.5em; font-size: 3em; text-align: center; line-height: 1.3em; }
+#timer-div-bottom-reset, #timer-div-bottom-start { width: 1.5em; border-right: 1px solid white; color: #eee; cursor: pointer; user-select: none; }
+#timer-div-bottom-reset:hover, #timer-div-bottom-start:hover { color: white; }
+#timer-div-bottom-next { text-align: center; margin: auto; }
 
 	</style>
 </head>
@@ -92,12 +96,16 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 			<h3 id="timer-name-header"></h3>
 
 			<div id="timer-div">
-				<div id="timer-div-clock"></div>
-				<div id="timer-div-mid"></div>
+				<div id="timer-div-clock">00:00</div>
+				<div id="timer-div-mid">
+					<div id="timer-div-bottom-elapsed">elapsed:<br>00:00</div>
+					<div id="timer-div-bottom-round">round:<br>0/0</div>
+					<div id="timer-div-bottom-remaining">remaining:<br>00:00</div>
+				</div>
 				<div id="timer-div-bottom">
 					<div id="timer-div-bottom-reset">⏹</div>
 					<div id="timer-div-bottom-start">▶</div>
-					<div id="timer-div-bottom-next"></div>
+					<div id="timer-div-bottom-next">next: asdf</div>
 				</div>
 			</div>
 
@@ -108,11 +116,13 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 
 	<script type="text/javascript">
-		
+"use strict"
+
 let id = x => document.getElementById(x)
 const UPDATESPEED = 250
-let timerRunning = false;
-let timeElapsed = 0;
+let timerRunning = false
+let timeElapsed = 0
+let timerObj
 
 init()
 
@@ -155,9 +165,9 @@ function showTimer(timer) {
 
 	id('timer-name-header').innerHTML = escapeHtml( timer.name )
 	fillTimerBar(timer)
+	timerObj = timer
 
-	timeElapsed = 0
-	timerRunning = false
+	resetTimer()
 }
 
 function createTimer() {
@@ -208,26 +218,36 @@ function fillTimerBar(timer) {
 }
 
 function secondsToTimer(time) {
-	return ((time >= 3600) ? ~~(time/3600)+':' : '') + ('00' + ~~((time/60)%60)).substr(-2) + ':' + time%60 
+	return ((time >= 3600) ? ~~(time/3600)+':' : '') + ('00' + ~~((time/60)%60)).substr(-2) + ':' + ('00' + ~~(time%60)).substr(-2)
+}
+
+function timeToNextInterval() {
+	return 600 - timeElapsed // TODO
 }
 
 function startStopTimer(){
 	timerRunning = !timerRunning
 	id('timer-div-bottom-start').innerHTML = timerRunning ? '⏸' : '▶'
-	if(timerRunning) updateTimer()
+	updateTimer()
 }
 
 function updateTimer() {
 	if(!timerRunning) return
 
-	timeElapsed += UPDATESPEED;
-	id('timer-div-clock').innerHTML = secondsToTimer(time);
+	timeElapsed += UPDATESPEED/1000;
+
+	let time = 600 - timeElapsed
+
+	id('timer-div-clock').innerHTML = secondsToTimer(time)
 
 	if(time > 0) setTimeout(updateTimer, UPDATESPEED)
 }
 
 function resetTimer() {
-	timeElapsed = 0;
+	timeElapsed = 0
+	timerRunning = false
+	id('timer-div-clock').innerHTML = secondsToTimer(timeToNextInterval())
+	id('timer-div-bottom-start').innerHTML = '▶'
 }
 
 function escapeHtml(unsafe) {
