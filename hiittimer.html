@@ -4,6 +4,7 @@
 	<meta charset="utf-8">
 	<title>HIIT Timer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="description" content="Create your own HIIT Timer and share it using the URL; fast, open source and without site reloading!"/>
 	<style type="text/css">
 		
 /* GENERAL */
@@ -11,14 +12,18 @@
 * { padding: 0; margin: 0; }
 main { max-width: 50em; padding-right: 1em; padding-left: 1em; margin: auto; }
 
-.timer-bar { height: 2em; width: 100%; border: 1px solid #ddd; }
+.shadow { box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px 0 rgba(0, 0, 0, 0.09); }
+
+/* TIMER BAR */
+
+.timer-bar { height: 2em; width: 100%; }
 .timer-bar div { display: inline-block; height: 2em; }
-.timer-bar div:hover:after { position: absolute; margin-top: 2em; content: attr(tooltip); background-color: rgba(0,0,0,0.7); color: white; animation: fadein 0.5s; }
+.timer-bar div:hover:after { position: absolute; margin-top: 2em; padding: 0 0.2em; content: attr(tooltip); background-color: rgba(0,0,0,0.7); color: white; animation: fadein 0.5s; }
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 
 /* HEADER */
 
-header { width: 100%; height: 3em; background-color: #EE0000; }
+header { width: 100%; height: 3em; background-color: #EE0000; box-shadow }
 header div { max-width: 50em; margin: auto; }
 header h1, header h2 { display: inline-block; white-space: nowrap; }
 header h1 { font-size: 2em; line-height: 1.5em; padding-left: 0.5em; }
@@ -32,7 +37,8 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 /* CREATE SITE*/
 
 #create-site p { width: 100%; text-align: center; margin-top: 1em; }
-
+#create-site>div { margin-top: 1em; }
+.input-pad { padding: 0.5em; padding-top: 0; }
 .inputs { display: block; width: 100%; height: 2em; font-size: 1em; line-height: 2em; text-align: center; margin-top: 0.2em; }
 
 #create-site .timer-bar { margin-top: 2em; }
@@ -46,23 +52,24 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 #timer-site h3 { text-align: center; font-size: 2em; margin-top: 0.5em; }
 
-#timer-site .timer-bar { box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px 0 rgba(0, 0, 0, 0.09); }
-
-#timer-div { width: 100%; height: 16.5em; margin: 2em 0; background-color: #ccc; color: white; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px 0 rgba(0, 0, 0, 0.09); }
+#timer-div { width: 100%; height: 16.5em; margin: 2em 0; background-color: #ccc; color: white; }
+#timer-div *::selection { background: none; color: #2D9CD5; }
+#timer-div *::-moz-selection { background: none; color: #2D9CD5; }
 #timer-div>div { display: block; width: 100%; }
 #timer-div-clock { height: 1.25em; font-size: 6em; text-align: center; }
 #timer-div-mid { height: 3em; font-size: 1.5em; text-align: center; }
 #timer-div-mid>div { display: inline-block; width: 30%; }
-#timer-div-bottom { border-top: 1px solid white; }
-#timer-div-bottom div { display: inline-block; height: 1.5em; font-size: 3em; text-align: center; line-height: 1.3em; }
+#timer-div-bottom { width: 100%; border-top: 1px solid white; border-collapse: collapse; }
+#timer-div-bottom td { height: 1.5em; font-size: 3em; text-align: center; }
 #timer-div-bottom-reset, #timer-div-bottom-start { width: 1.5em; border-right: 1px solid white; color: #eee; cursor: pointer; user-select: none; }
 #timer-div-bottom-reset:hover, #timer-div-bottom-start:hover { color: white; }
-#timer-div-bottom-next { text-align: center; margin: auto; }
+#timer-div-bottom-next { cursor: pointer; }
+
 
 	</style>
 </head>
 <body>
-	<header>
+	<header class="shadow">
 		<div>
 			<h1>HIIT TIMER</h1>
 			<a id="create-site-link" href="#"><h2>new</h2></a>
@@ -72,21 +79,24 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 	<main>
 		<div id="create-site">
+			<div class="shadow input-pad">
+				<p><b>Name</b>:</p>
+				<input class="inputs" type="text" id="input-name" placeholder="name" value="my awesome HIIT timer" maxlength="40">
+				<p><b>Number of Sets</b>:</p>
+				<input class="inputs" type="number" id="input-set-amount" value="6" min="1">
+			</div>
+			<div class="shadow input-pad">
+				<p>Duration of <b> Warmup Interval</b> (in seconds):</p>
+				<input class="inputs" type="number" id="input-time-warmup" value="90" min="0">
+				<p>Duration of <b> High Intensity Interval</b> (in seconds):</p>
+				<input class="inputs" type="number" id="input-time-high" value="30" min="0">
+				<p>Duration of <b> Low Intensity Interval</b> (in seconds):</p>
+				<input class="inputs" type="number" id="input-time-low" value="90" min="0">
+				<p>Duration of <b> Cooldown Interval</b> (in seconds):</p>
+				<input class="inputs" type="number" id="input-time-cooldown" value="90" min="0">
+			</div>
 
-			<p><b>Name</b>:</p>
-			<input class="inputs" type="text" id="input-name" placeholder="name" value="my awesome HIIT timer" maxlength="40">
-			<p><b>Number of Sets</b>:</p>
-			<input class="inputs" type="number" id="input-set-amount" value="6" min="1">
-			<p>Duration of <b> Warmup Interval</b> (in seconds):</p>
-			<input class="inputs" type="number" id="input-time-warmup" value="90" min="0">
-			<p>Duration of <b> High Intensity Interval</b> (in seconds):</p>
-			<input class="inputs" type="number" id="input-time-high" value="30" min="0">
-			<p>Duration of <b> Low Intensity Interval</b> (in seconds):</p>
-			<input class="inputs" type="number" id="input-time-low" value="90" min="0">
-			<p>Duration of <b> Cooldown Interval</b> (in seconds):</p>
-			<input class="inputs" type="number" id="input-time-cooldown" value="90" min="0">
-
-			<div class="timer-bar"></div>
+			<div class="timer-bar shadow"></div>
 
 			<div class="placeholder"></div>
 			<a id="create-timer-button" href="javascript:createTimer()">Create Timer <span id="create-timer-button-time"></span></a>
@@ -95,21 +105,21 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 		<div id="timer-site">
 			<h3 id="timer-name-header"></h3>
 
-			<div id="timer-div">
+			<div id="timer-div" class="shadow">
 				<div id="timer-div-clock">00:00</div>
 				<div id="timer-div-mid">
-					<div id="timer-div-bottom-elapsed">elapsed:<br>00:00</div>
-					<div id="timer-div-bottom-round">round:<br>0/0</div>
-					<div id="timer-div-bottom-remaining">remaining:<br>00:00</div>
+					<div>elapsed:<br><span id="timer-div-mid-elapsed">00:00</span></div>
+					<div>round:<br><span id="timer-div-mid-round">0/0</span></div>
+					<div>remaining:<br><span id="timer-div-mid-remaining">00:00</span></div>
 				</div>
-				<div id="timer-div-bottom">
-					<div id="timer-div-bottom-reset">⏹</div>
-					<div id="timer-div-bottom-start">▶</div>
-					<div id="timer-div-bottom-next">next: asdf</div>
-				</div>
+				<table id="timer-div-bottom"><tr>
+					<td id="timer-div-bottom-reset">⏹</td>
+					<td id="timer-div-bottom-start">▶</td>
+					<td id="timer-div-bottom-next">next: asdf</td>
+				</tr></table>
 			</div>
 
-			<div class="timer-bar"></div>
+			<div class="timer-bar shadow"></div>
 		</div>
 
 	</main>
@@ -123,6 +133,7 @@ const UPDATESPEED = 250
 let timerRunning = false
 let timeElapsed = 0
 let timerObj
+let curretTimerID;
 
 init()
 
@@ -147,7 +158,9 @@ function dehash(hash) {
 	const lowII = +arr[4] > 0 ? +arr[4] : 0
 	const cooldown = +arr[5] > 0 ? +arr[4] : 0
 
-	return { name: name, sets: sets, warmup: warmup, highII: highII, lowII: lowII, cooldown: cooldown }
+	const time = warmup + highII*sets + lowII*(sets-1) + cooldown
+
+	return { name: name, sets: sets, warmup: warmup, highII: highII, lowII: lowII, cooldown: cooldown, time: time }
 }
 
 function showCreate() {
@@ -198,20 +211,18 @@ function createTimerInputChange() {
 	const time = warmup + highII*sets + lowII*(sets-1) + cooldown
 
 	id('create-timer-button-time').innerHTML = ' (' + ~~(time/60) + ':' + ((time%60)+'00').slice(0,2) + ')'
-	fillTimerBar({ name: name, sets: sets, warmup: warmup, highII: highII, lowII: lowII, cooldown: cooldown })
+	fillTimerBar({ name: name, sets: sets, warmup: warmup, highII: highII, lowII: lowII, cooldown: cooldown, time: time })
 }
 
 function fillTimerBar(timer) {
-	const time = timer.warmup + timer.highII*timer.sets + timer.lowII*(timer.sets-1) + timer.cooldown
-
 	let result = '';
-	result += '<div style="width: '+timer.warmup/time*100+'%; background-color: #F4DB17;" tooltip="Warmup '+timer.warmup+'s"></div>'
-	result += '<div style="width: '+timer.highII/time*100+'%; background-color: red;" tooltip="High Intensity '+timer.highII+'s"></div>'
+	result += '<div style="width: '+timer.warmup/timer.time*100+'%; background-color: #F4DB17;" tooltip="Warmup '+timer.warmup+'s"></div>'
+	result += '<div style="width: '+timer.highII/timer.time*100+'%; background-color: red;" tooltip="High Intensity '+timer.highII+'s"></div>'
 	for(let i=1; i < timer.sets; i++) {
-		result += '<div style="width: '+timer.lowII/time*100+'%; background-color: green;" tooltip="Low Intensity '+timer.lowII+'s"></div>'
-		result += '<div style="width: '+timer.highII/time*100+'%; background-color: red;" tooltip="High Intensity '+timer.highII+'s"></div>'
+		result += '<div style="width: '+timer.lowII/timer.time*100+'%; background-color: #23AB23;" tooltip="Low Intensity '+timer.lowII+'s"></div>'
+		result += '<div style="width: '+timer.highII/timer.time*100+'%; background-color: red;" tooltip="High Intensity '+timer.highII+'s"></div>'
 	}
-	result += '<div style="width: '+timer.cooldown/time*100+'%; background-color: #F4DB17;" tooltip="Cooldown '+timer.cooldown+'s"></div>'
+	result += '<div style="width: '+timer.cooldown/timer.time*100+'%; background-color: #F4DB17;" tooltip="Cooldown '+timer.cooldown+'s"></div>'
 
 	const timerBars = document.getElementsByClassName('timer-bar')
 	for(let i=0; i < timerBars.length; i++) timerBars[i].innerHTML = result
@@ -222,32 +233,115 @@ function secondsToTimer(time) {
 }
 
 function timeToNextInterval() {
-	return 600 - timeElapsed // TODO
+	return Math.ceil( (() => {
+		// finished
+		if(timeElapsed >= timerObj.time) return 0
+		
+		// warmup
+		if(timeElapsed < timerObj.warmup) return timerObj.warmup - timeElapsed
+
+		// cooldown
+		if(timeElapsed >= timerObj.time-timerObj.cooldown) return timerObj.time - timeElapsed
+
+		// high
+		const tmp = (timeElapsed-timerObj.warmup) % (timerObj.highII+timerObj.lowII)
+		if(tmp < timerObj.highII) return timerObj.highII - tmp
+
+		// low
+		return timerObj.lowII+timerObj.highII - tmp
+	})())
+}
+
+function currentRound() {
+	
+	// finished
+	if(timeElapsed >= timerObj.time) return timerObj.sets
+	
+	// warmup
+	if(timeElapsed < timerObj.warmup) return 1
+
+	// cooldown
+	if(timeElapsed >= timerObj.time-timerObj.cooldown) return timerObj.sets*2+1
+
+	// high
+	const tmp = (timeElapsed-timerObj.warmup) % (timerObj.highII+timerObj.lowII)
+	if(tmp < timerObj.highII) return ~~((timeElapsed-timerObj.warmup) / (timerObj.highII+timerObj.lowII))*2 +2
+
+	// low
+	return ~~((timeElapsed-timerObj.warmup) / (timerObj.highII+timerObj.lowII))*2 +3
+
+}
+
+function intervalType(elapTime = timeElapsed) {
+
+	// finished
+	if(elapTime >= timerObj.time) return 'finished'
+	
+	// warmup
+	if(elapTime < timerObj.warmup) return 'warmup'
+
+	// cooldown
+	if(elapTime >= timerObj.time-timerObj.cooldown) return 'cooldown'
+
+	// high
+	const tmp = (elapTime-timerObj.warmup) % (timerObj.highII+timerObj.lowII)
+	if(tmp < timerObj.highII) return 'highII'
+
+	// low
+	return 'lowII'
+}
+
+function intervalToColor(int){
+	switch(int){
+			case 'warmup':
+			case 'cooldown': return '#F4DB17'
+			case 'highII': return 'red'
+			case 'lowII': return '#23AB23'
+			case 'finished':
+			default: return '#ccc'
+		}
 }
 
 function startStopTimer(){
 	timerRunning = !timerRunning
 	id('timer-div-bottom-start').innerHTML = timerRunning ? '⏸' : '▶'
+	clearTimeout(curretTimerID)
 	updateTimer()
 }
 
 function updateTimer() {
-	if(!timerRunning) return
-
 	timeElapsed += UPDATESPEED/1000;
 
-	let time = 600 - timeElapsed
+	const time = timeToNextInterval()
 
 	id('timer-div-clock').innerHTML = secondsToTimer(time)
+	id('timer-div-mid-elapsed').innerHTML = secondsToTimer(timeElapsed)
+	id('timer-div-mid-remaining').innerHTML = secondsToTimer(Math.ceil(timerObj.time - timeElapsed))
+	id('timer-div-mid-round').innerHTML = currentRound() + '/' + (timerObj.sets*2+1)
+	id('timer-div').style.backgroundColor = intervalToColor(intervalType())
+	id('timer-div-bottom-next').style.backgroundColor = intervalToColor(intervalType(timeElapsed+timeToNextInterval()))
 
-	if(time > 0) setTimeout(updateTimer, UPDATESPEED)
+	if(time > 0 && timerRunning) curretTimerID = setTimeout(updateTimer, UPDATESPEED)
 }
 
 function resetTimer() {
 	timeElapsed = 0
 	timerRunning = false
+	clearTimeout(curretTimerID)
 	id('timer-div-clock').innerHTML = secondsToTimer(timeToNextInterval())
+	id('timer-div-mid-elapsed').innerHTML = secondsToTimer(0)
+	id('timer-div-mid-remaining').innerHTML = secondsToTimer(Math.ceil(timerObj.time - timeElapsed))
+	id('timer-div-mid-round').innerHTML = '0/' + (timerObj.sets*2+1)
 	id('timer-div-bottom-start').innerHTML = '▶'
+	id('timer-div').style.backgroundColor = intervalToColor(intervalType())
+	id('timer-div-bottom-next').style.backgroundColor = intervalToColor(intervalType(timeElapsed+timeToNextInterval()))
+}
+
+function scipToNextInterval() {
+	timeElapsed = Math.floor( timeElapsed + timeToNextInterval() )
+	clearTimeout(curretTimerID)
+	updateTimer()
+
 }
 
 function escapeHtml(unsafe) {
@@ -261,6 +355,7 @@ function escapeHtml(unsafe) {
 
 id('timer-div-bottom-start').addEventListener('click', startStopTimer)
 id('timer-div-bottom-reset').addEventListener('click', resetTimer)
+id('timer-div-bottom-next').addEventListener('click', scipToNextInterval)
 window.addEventListener("hashchange", init)
 
 	</script>
