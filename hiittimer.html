@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>HIIT Timer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<meta name="description" content="Create your own HIIT Timer and share it using the URL; fast, open source and without site reloading!"/>
+	<meta name="description" content="Create your own HIIT Timer and share it using the URL; simple, open source and without site reloading!"/>
 	<style type="text/css">
 		
 /* GENERAL */
@@ -131,11 +131,12 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 "use strict"
 
 let id = x => document.getElementById(x)
-const UPDATESPEED = 250
+const UPDATESPEED = 200
 let timerRunning = false
 let timeElapsed = 0
 let timerObj
-let curretTimerID;
+let curretTimerID
+let lastIntervalType = ''
 
 init()
 
@@ -308,14 +309,16 @@ function startStopTimer(){
 	timerRunning = !timerRunning
 	id('timer-div-bottom-start').innerHTML = timerRunning ? '⏸' : '▶'
 	clearTimeout(curretTimerID)
+	if(timerRunning) makeBeeb()
 	updateTimer()
 }
 
 function updateTimer() {
-	const time = timeToNextInterval()
 	
-	if(time > 0) timeElapsed += UPDATESPEED/1000;
+	if(timeElapsed < timerObj.time) timeElapsed += UPDATESPEED/1000;
 	else timeElapsed = timerObj.time;
+
+	const time = timeToNextInterval()
 
 	id('timer-div-clock').innerHTML = secondsToTimer(time)
 	id('timer-div-mid-elapsed').innerHTML = secondsToTimer(timeElapsed)
@@ -326,12 +329,19 @@ function updateTimer() {
 	id('timer-div-name').innerHTML = intervalType()
 	id('timer-div-bottom-next').innerHTML = intervalType(timeElapsed+timeToNextInterval())
 
+	// beeb
+	if(intervalType() != lastIntervalType) {
+		lastIntervalType = intervalType()
+		makeBeeb()
+	}
+
 	if(time > 0 && timerRunning) curretTimerID = setTimeout(updateTimer, UPDATESPEED)
 }
 
 function resetTimer() {
 	timeElapsed = 0
 	timerRunning = false
+	lastIntervalType = ''
 	clearTimeout(curretTimerID)
 	id('timer-div-clock').innerHTML = secondsToTimer(timeToNextInterval())
 	id('timer-div-mid-elapsed').innerHTML = secondsToTimer(0)
@@ -348,7 +358,6 @@ function scipToNextInterval() {
 	timeElapsed = Math.floor( timeElapsed + timeToNextInterval() )
 	clearTimeout(curretTimerID)
 	updateTimer()
-
 }
 
 function escapeHtml(unsafe) {
@@ -358,6 +367,10 @@ function escapeHtml(unsafe) {
 		.replace(/>/g, "&gt;")
 		.replace(/"/g, "&quot;")
 		.replace(/'/g, "&#039;")
+}
+
+function makeBeeb() {
+	new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+Array(0.5*1e3).join(123)).play()
 }
 
 id('timer-div-bottom-start').addEventListener('click', startStopTimer)
