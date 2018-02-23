@@ -157,6 +157,7 @@ init()
 
 function init() {
 	const x = window.location.hash.slice(1)
+	window.scrollTo(0,0)
 	if(x[0] == 'T') showTimer( dehash(x.slice(1)) )
 	else showCreate()
 
