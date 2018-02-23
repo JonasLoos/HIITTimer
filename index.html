@@ -69,7 +69,7 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 #timer-site .timer-bar { margin-top: 3em; }
 
-#share-button { display: none; width: 100%; height: 1.5em; font-size: 2em; text-align: center; color: white; background-color: #3ED1FF; }
+#share-button { display: none; width: 100%; height: 1.5em; margin-top: 2em; font-size: 2em; text-align: center; color: white; background-color: #ddd; border: none; outline: none; cursor: pointer; }
 
 /* DESCRIPTION */
 
@@ -136,6 +136,8 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 			</div>
 
 			<div class="timer-bar shadow"></div>
+
+			<input type="button" id="share-button" value="share" class="shadow">
 		</div>
 
 		<div id="description-div">
@@ -211,6 +213,9 @@ function showTimer(timer) {
 	timerObj = timer
 
 	resetTimer()
+
+
+	id('share-button').style.display = (navigator && navigator.share) ? 'block' : 'none'
 }
 
 function createTimer() {
@@ -400,9 +405,21 @@ function makeBeeb() {
 	new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'+Array(0.5*1e3).join(123)).play()
 }
 
+function share() {
+	if (navigator.share) {
+		navigator.share({
+			title: 'HIIT Timer',
+			text: id('timer-name-header').innerHTML,
+			url: window.location,
+		})
+		.catch((error) => console.log('Error sharing', error))
+	}
+}
+
 id('timer-div-bottom-start').addEventListener('click', startStopTimer)
 id('timer-div-bottom-reset').addEventListener('click', resetTimer)
 id('timer-div-bottom-next').addEventListener('click', scipToNextInterval)
+id('share-button').addEventListener('click', share)
 window.addEventListener("hashchange", init)
 
 	</script>
