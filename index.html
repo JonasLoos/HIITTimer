@@ -69,11 +69,17 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 #timer-site .timer-bar { margin-top: 3em; }
 
+#share-button { display: none; width: 100%; height: 1.5em; font-size: 2em; text-align: center; color: white; background-color: #3ED1FF; }
+
 /* DESCRIPTION */
 
 #description-div { color: #999; margin: 4em 0; }
 #description-div a { color: #3ED1FF; }
 #description-div p { padding-top: 0.5em; }
+
+/* NO-JS */
+
+#no-js { width: 100%; margin-top: 6em; margin-bottom: 6em; text-align: center; }
 
 	</style>
 </head>
@@ -84,6 +90,8 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 			<a id="create-site-link" href="#"><h2>new</h2></a>
 		</div>
 	</header>
+
+	<p id="no-js">JavaScript is required for this site.</p>
 
 	<main>
 		<div id="create-site">
@@ -140,7 +148,6 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 		</div>
 
 	</main>
-	
 
 	<script type="text/javascript">
 "use strict"
@@ -152,6 +159,10 @@ let timeElapsed = 0
 let timerObj
 let curretTimerID
 let lastIntervalType = ''
+
+// dejs
+id('no-js').style.display = 'none'
+
 
 init()
 
