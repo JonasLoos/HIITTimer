@@ -159,7 +159,7 @@ const UPDATESPEED = 200
 let timerRunning = false
 let timeElapsed = 0
 let timerObj
-let curretTimerID
+let curretTimerID = 0
 let lastIntervalType = ''
 
 // dejs
@@ -169,6 +169,11 @@ id('no-js').style.display = 'none'
 init()
 
 function init() {
+	timerRunning = false;
+	clearTimeout(curretTimerID)
+	lastIntervalType = ''
+	timeElapsed = 0
+
 	const x = window.location.hash.slice(1)
 	window.scrollTo(0,0)
 	if(x[0] == 'T') showTimer( dehash(x.slice(1)) )
