@@ -1,4 +1,5 @@
 # HIITTimer
-Create your own HIIT Timer and share it using the URL; simple, open source and without site reloading!
 
-https://jloos.de/hiittimer
+It started as an 1-day project, which can be used to easily create custom HIIT-timers and share them.
+
+https://hiittimer.jloos.de
