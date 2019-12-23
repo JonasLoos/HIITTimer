@@ -14,7 +14,7 @@
 		
 /* GENERAL */
 
-* { padding: 0; margin: 0; }
+* { padding: 0; margin: 0; font-style: sans-serif; }
 main { max-width: 50em; padding-right: 1em; padding-left: 1em; margin: auto; }
 
 .shadow { box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 6px 20px 0 rgba(0, 0, 0, 0.09); }
@@ -28,7 +28,7 @@ main { max-width: 50em; padding-right: 1em; padding-left: 1em; margin: auto; }
 
 /* HEADER */
 
-header { width: 100%; height: 3em; background-color: #EE0000; box-shadow }
+header { width: 100%; height: 3em; background-color: #76E65E; box-shadow }
 header div { max-width: 50em; margin: auto; }
 header h1, header h2 { display: inline-block; white-space: nowrap; }
 header h1 { font-size: 2em; line-height: 1.5em; padding-left: 0.5em; }
@@ -37,7 +37,7 @@ header h2 { font-size: 1.5em; line-height: 2em; padding: 0 0.5em; }
 a { display: inline-block; color: black; outline: none; text-decoration: none; }
 
 #create-site-link { float: right; display: none; }
-#create-site-link:hover { background-color: #D72527; }
+#create-site-link:hover { background-color: #62C84D; }
 
 /* CREATE SITE*/
 
@@ -46,8 +46,8 @@ a { display: inline-block; color: black; outline: none; text-decoration: none; }
 .input-pad { padding: 0.5em; padding-top: 0; }
 .inputs { display: block; width: 100%; height: 2em; font-size: 1em; line-height: 2em; text-align: center; margin-top: 0.2em; }
 
-#create-timer-button { position: fixed; bottom: 0; left: 0; width: 100vw; height: 3em; line-height: 3em; text-align: center; background-color: #EE0000; }
-#create-timer-button:hover { background-color: #D72527; }
+#create-timer-button { position: fixed; bottom: 0; left: 0; width: 100vw; height: 3em; line-height: 3em; text-align: center; background-color: #76E65E; }
+#create-timer-button:hover { background-color: #62C84D; }
 
 /* TIMER SITE */
 
@@ -257,10 +257,10 @@ function createTimerInputChange() {
 function fillTimerBar(timer) {
 	let result = '';
 	result += '<div style="width: '+timer.warmup/timer.time*100+'%; background-color: #F4DB17;" tooltip="Warmup '+timer.warmup+'s"></div>'
-	result += '<div style="width: '+timer.highII/timer.time*100+'%; background-color: red;" tooltip="High Intensity '+timer.highII+'s"></div>'
+	result += '<div style="width: '+timer.highII/timer.time*100+'%; background-color: #FF5E4D;" tooltip="High Intensity '+timer.highII+'s"></div>'
 	for(let i=1; i < timer.sets; i++) {
-		result += '<div style="width: '+timer.lowII/timer.time*100+'%; background-color: #23AB23;" tooltip="Low Intensity '+timer.lowII+'s"></div>'
-		result += '<div style="width: '+timer.highII/timer.time*100+'%; background-color: red;" tooltip="High Intensity '+timer.highII+'s"></div>'
+		result += '<div style="width: '+timer.lowII/timer.time*100+'%; background-color: #62C84D;" tooltip="Low Intensity '+timer.lowII+'s"></div>'
+		result += '<div style="width: '+timer.highII/timer.time*100+'%; background-color: #FF5E4D;" tooltip="High Intensity '+timer.highII+'s"></div>'
 	}
 	result += '<div style="width: '+timer.cooldown/timer.time*100+'%; background-color: #F4DB17;" tooltip="Cooldown '+timer.cooldown+'s"></div>'
 
@@ -335,8 +335,8 @@ function intervalToColor(int){
 	switch(int){
 			case 'Warmup':
 			case 'Cooldown': return '#F4DB17'
-			case 'High Intensity': return 'red'
-			case 'Low Intensity': return '#23AB23'
+			case 'High Intensity': return '#FF5E4D'
+			case 'Low Intensity': return '#62C84D'
 			case 'Finished':
 			default: return '#ccc'
 		}
