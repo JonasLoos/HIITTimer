@@ -3,8 +3,13 @@
   "description": "Create your own HIIT Timer and share it using the URL; simple, open source and without site reloading!",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "icon/android-chrome-192x192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon/android-chrome-256x256.png",
+      "sizes": "256x256",
       "type": "image/png"
     }
   ],
